@@ -92,7 +92,7 @@
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
     "autoprefixer": "^10.4.20",
-    "cypress": "^13.17.0",
+    "cypress": "^14.0.3",
     "eslint": "^9.20.1",
     "eslint-config-next": "^15.1.7",
     "eslint-config-prettier": "^10.0.1",

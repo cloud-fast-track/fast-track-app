@@ -7,6 +7,6 @@
         "ignoreAtRules": ["tailwind"]
       }
     ],
-    "at-rule-no-deprecated": false
+    "at-rule-no-deprecated": null
   }
 }

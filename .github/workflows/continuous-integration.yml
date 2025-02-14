@@ -1,0 +1,75 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  checks: write
+  contents: read
+  packages: write
+  pull-requests: write
+  security-events: write
+
+jobs:
+  ci:
+    name: Build, Test, and Package
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        id: setup-node
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version-file: .node-version
+
+      - name: Get Version
+        id: get-version
+        uses: issue-ops/semver@v2
+        with:
+          allow-prerelease: true
+          check-only: true
+          manifest-path: package.json
+          overwrite: false
+          workspace: ${{ github.workspace }}
+
+      - name: Install Dependencies
+        id: install
+        run: npm ci
+
+      - name: Check Project Formatting
+        id: format
+        run: npm run prettier:check
+
+      - name: Lint Project
+        id: lint
+        run: npm run lint
+
+      # - name: Build Project
+      #   id: build
+      #   run: npm run next:build
+
+      # - name: Test Project
+      #   id: test
+      #   run: npm run test -- --ci --reporters=default --reporters=jest-junit
+
+      # - name: Report Tests
+      #   id: report
+      #   uses: EnricoMi/publish-unit-test-result-action@v2
+      #   with:
+      #     check_run: false
+      #     files: |
+      #       reports/**/*.xml

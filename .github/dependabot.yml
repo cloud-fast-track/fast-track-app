@@ -1,0 +1,40 @@
+version: 2
+
+updates:
+  - package-ecosystem: docker
+    directory: /
+    groups:
+      docker-minor:
+        update-types:
+          - minor
+          - patch
+    open-pull-requests-limit: 15
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: github-actions
+    directory: /
+    groups:
+      github-actions-minor:
+        update-types:
+          - minor
+          - patch
+    open-pull-requests-limit: 15
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: npm
+    directory: /
+    groups:
+      npm-development-minor:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      npm-production-patch:
+        dependency-type: production
+        update-types:
+          - patch
+    open-pull-requests-limit: 15
+    schedule:
+      interval: weekly

@@ -1,0 +1,9 @@
+.DS_Store
+.env*.local
+.next
+build
+coverage
+megalinter-reports
+next-env.d.ts
+node_modules
+out

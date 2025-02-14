@@ -1,6 +1,8 @@
 'use server'
 
 import { FastTrackProjectSchema } from '@/app/(fast-track-layout)/projects/schema'
+import { getGroup } from '@/lib/azure'
+import { createTeam, teamExists } from '@/lib/github'
 import prisma from '@/lib/prisma'
 import { azureGroupExists } from '@/lib/refinements'
 import { revalidateTag } from 'next/cache'
@@ -48,19 +50,19 @@ const ServerSideSchema = FastTrackProjectSchema.extend({
   })
 
   if (project !== null) {
-    console.error(`Project '${data.number}: ${data.name}' already exists`)
+    console.error(`Project Already Exists: ${data.number}-${data.name}`)
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: `Project '${data.number}: ${data.name}' already exists`
+      message: `Project Already Exists: ${data.number}-${data.name}`
     })
   }
 
   // Read and write groups cannot be the same.
   if (data.readGroup === data.writeGroup) {
-    console.error(`Read and Write Groups cannot be the same: ${data.readGroup}`)
+    console.error(`Read and Write Groups Cannot Match: ${data.readGroup}`)
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: `Read and Write Groups cannot be the same: ${data.readGroup}`
+      message: `Read and Write Groups Cannot Match: ${data.readGroup}`
     })
   }
 })
@@ -74,29 +76,36 @@ const ServerSideSchema = FastTrackProjectSchema.extend({
 export async function Provision(
   request: z.infer<typeof ServerSideSchema>
 ): Promise<Response> {
-  console.log('Provisioning FastTrack Project...')
+  console.log(`Creating Project: ${request.number}-${request.name}`)
 
   const { data, error, success } =
     await ServerSideSchema.safeParseAsync(request)
 
   // Fail early if the payload doesn't validate
   if (!success) {
-    console.log('Validation Error:', error.flatten().fieldErrors)
-
-    const errors = Object.entries(error.flatten().fieldErrors)
-      .map(([field, errors]) => {
+    const errors = [
+      ...error.flatten().formErrors,
+      ...Object.entries(error.flatten().fieldErrors).map(([field, errors]) => {
         return `${field}: ${errors.join(', ')}`
       })
-      .join('\n')
+    ].join('\n')
 
     return {
       success: false,
-      message: `Validation Error: ${errors}`,
+      message: `Validation Error(s): ${errors}`,
       data: error.flatten().fieldErrors
     }
   }
 
   console.log('Payload:', data)
+
+  // Create the GitHub teams if they do not exist yet.
+  for (const team of [data.readGroup, data.writeGroup, data.deployGroup]) {
+    if (!(await teamExists(team))) {
+      const { id, name, description } = await getGroup(team)
+      createTeam(id, name, description)
+    }
+  }
 
   try {
     // Create a new Project resource

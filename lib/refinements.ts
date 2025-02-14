@@ -15,6 +15,8 @@ import 'isomorphic-fetch'
  * @param value The group name.
  */
 export async function azureGroupExists(value: string): Promise<boolean> {
+  console.log(`Checking if Azure AD Group Exists: '${value}'`)
+
   // Create the Microsoft Graph client.
   const graphClient = Client.initWithMiddleware({
     debugLogging: true,
@@ -44,14 +46,20 @@ export async function azureGroupExists(value: string): Promise<boolean> {
     .select('description,displayName,id,onPremisesSamAccountName')
     .get()) as { value: Group[] }
 
-  if (response.value.length === 0) return false
+  if (response.value.length === 0) {
+    console.log(`Azure AD Group Does Not Exist (Empty Response): '${value}'`)
+    return false
+  }
 
   // At least one of onPremisesSamAccountName or displayName must exist.
   if (
     !response.value[0].onPremisesSamAccountName &&
     !response.value[0].displayName
-  )
+  ) {
+    console.log(`Azure AD Group Does Not Exist (No Valid Name): '${value}'`)
     return false
+  }
 
+  console.log(`Azure AD Group Exists: '${value}'`)
   return true
 }

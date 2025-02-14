@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input'
 import { useSidebar } from '@/components/ui/sidebar'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CloudProvider } from '@prisma/client'
+import { redirect } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -35,13 +36,13 @@ export default function ProjectForm() {
   const { debugMode } = useSidebar()
 
   async function onSubmit(data: z.infer<typeof FastTrackProjectSchema>) {
-    console.log('IN THE ONSUBMIT FUNCTION')
-    console.log(data)
-
     // This function is invoked on the server.
     const res = await Provision(data)
     const toaster = res.success ? toast.success : toast.error
     toaster(res.message)
+
+    // Redirect to the new project's page.
+    if (res.success) redirect(`/projects/${res.data.id}`)
   }
 
   return (

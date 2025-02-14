@@ -18,7 +18,7 @@ export const FastTrackProjectSchema = z.object({
     })
     .describe('Project Name')
     .min(3, {
-      message: 'Project name must be at least 3 characters.'
+      message: 'Invalid Field: Name (Length Must 3+ Characters)'
     }),
   readGroup: z.string({
     required_error: 'Missing Required Field: Read Group'
@@ -30,7 +30,10 @@ export const FastTrackProjectSchema = z.object({
     required_error: 'Missing Required Field: Deploy Group'
   }),
   clouds: z
-    .array(z.nativeEnum(CloudProvider).describe('Cloud Provider'))
+    .array(z.nativeEnum(CloudProvider).describe('Cloud Provider(s)'))
     .default([])
+    .refine((value) => value.length > 0, {
+      message: 'Missing Required Field: Cloud Provider(s)'
+    })
     .describe('Cloud Provider(s)')
 })

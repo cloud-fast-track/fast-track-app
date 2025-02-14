@@ -35,6 +35,9 @@ jobs:
 
       - name: Lint Codebase
         id: lint
+        env:
+          DEFAULT_WORKSPACE: ${{ github.workspace }}
+          GITHUB_TOKEN: ${{ inputs.github_token }}
         uses: oxsecurity/megalinter/flavors/cupcake@v8
 
       - if: ${{ always() }}

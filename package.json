@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@azure/identity": "^4.6.0",
-    "@hookform/resolvers": "^4.0.0",
+    "@hookform/resolvers": "^4.1.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@octokit/rest": "^21.1.0",
     "@primer/octicons-react": "^19.15.0",

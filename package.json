@@ -1,18 +1,18 @@
 {
-  "name": "@ncalteen/fast-track",
+  "name": "@cloud-fast-track/fast-track",
   "description": "FastTrack (React/Next.js)",
   "author": "Nick Alteen <ncalteen@github.com>",
   "version": "1.0.0",
   "private": true,
   "main": "src/bin/www",
   "type": "module",
-  "homepage": "https://github.com/ncalteen/fast-track",
+  "homepage": "https://github.com/cloud-fast-track/fast-track",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ncalteen/fast-track.git"
+    "url": "git+https://github.com/cloud-fast-track/fast-track.git"
   },
   "bugs": {
-    "url": "https://github.com/ncalteen/fast-track/issues"
+    "url": "https://github.com/cloud-fast-track/fast-track/issues"
   },
   "keywords": [],
   "engines": {

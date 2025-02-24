@@ -38,7 +38,7 @@
     "outputName": "jest-junit.xml"
   },
   "dependencies": {
-    "@azure/identity": "^4.6.0",
+    "@azure/identity": "^4.7.0",
     "@hookform/resolvers": "^4.1.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@octokit/rest": "^21.1.1",

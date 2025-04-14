@@ -84,7 +84,7 @@
     "@eslint/compat": "^1.2.6",
     "@microsoft/microsoft-graph-types": "^2.40.0",
     "@next/eslint-plugin-next": "^15.1.7",
-    "@octokit/types": "^13.7.0",
+    "@octokit/types": "^14.0.0",
     "@types/cypress": "^1.1.6",
     "@types/node": "^22.13.4",
     "@types/react": "^19.0.10",
